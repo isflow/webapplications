@@ -136,7 +136,9 @@
         <div>
             <ul id="hashedEmailList"></ul>
             <button class="method-btn" type="button" id="showAllButton" style="display: none;" onclick="showAllResults()">Show All Results</button>
+            <button class="method-btn" type="button" id="showLessButton" style="display: none;" onclick="showLessResults()">Show Less Results</button>
             <a id="downloadLink" style="display: none;">Download Hashed Emails</a>
+            <p id="uploadedFileName"></p>
         </div>
     </div>
 
@@ -148,17 +150,22 @@
         let hashedEmails = [];
         let displayedResults = 10;
         let algorithm = '';
+        let uploadedFileName = '';
 
         function handleFileUpload(input) {
             const uploadMessage = document.getElementById('uploadMessage');
+            const uploadedFileNameElement = document.getElementById('uploadedFileName');
             const progressContainer = document.getElementById('progressContainer');
             const progressBar = document.getElementById('progressBar');
 
             if (input.files.length > 0) {
+                const file = input.files[0];
+                uploadedFileName = file.name; // 업로드한 파일명 저장
+
                 uploadMessage.style.display = 'block';
+                uploadedFileNameElement.textContent = `Uploaded File: ${uploadedFileName}`;
                 progressContainer.style.display = 'block';
 
-                const file = input.files[0];
                 const reader = new FileReader();
 
                 reader.onload = function(event) {
@@ -192,6 +199,7 @@
                 reader.readAsText(file);
             } else {
                 uploadMessage.style.display = 'none';
+                uploadedFileNameElement.textContent = ''; // 파일명 초기화
                 progressContainer.style.display = 'none';
             }
         }
@@ -268,6 +276,15 @@
         function showAllResults() {
             displayedResults = hashedEmails.length;
             displayResults();
+            document.getElementById('showAllButton').style.display = 'none';
+            document.getElementById('showLessButton').style.display = 'block';
+        }
+
+        function showLessResults() {
+            displayedResults = 10;
+            displayResults();
+            document.getElementById('showAllButton').style.display = 'block';
+            document.getElementById('showLessButton').style.display = 'none';
         }
 
         // 지원하는 언어와 주의문구 매핑
