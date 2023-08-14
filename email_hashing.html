@@ -87,11 +87,21 @@
             display: none;
             text-align: left;
         }
+        .upload-message, .progress-container {
+            display: none;
+            margin-top: 10px;
+            text-align: left;
+        }
+        .progress-bar {
+            width: 0;
+            height: 20px;
+            background-color: #4CAF50;
+        }
         footer {
             margin-top: 20px;
             color: #666;
-            text-align: center;
-            width: 100%;
+            text-align: left;
+            width: 50%;
         }
         footer a {
             color: #003366;
@@ -107,8 +117,12 @@
         <h2>Step 1: Select a CSV File</h2>
         <form>
             <label for="csv_file" class="upload-btn">Upload CSV File</label>
-            <input type="file" id="csv_file" accept=".csv">
+            <input type="file" id="csv_file" accept=".csv" onchange="handleFileUpload(this)">
         </form>
+        <p class="upload-message" id="uploadMessage">Upload complete!</p>
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
 
         <div class="method-btn-container">
             <h2>Step 2: Choose Hashing Method</h2>
@@ -128,10 +142,58 @@
     <footer>
         <p>Criteo does not collect plain email addresses, and during the use of this tool, no email addresses are transmitted to Criteo.<br>If you have any questions, please contact here <a href="mailto:ji.lee@criteo.com">ji.lee@criteo.com</a>.</p>
     </footer>
+
     <script>
         let hashedEmails = [];
         let displayedResults = 10;
+        let algorithm = '';
 
+        function handleFileUpload(input) {
+            const uploadMessage = document.getElementById('uploadMessage');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+
+            if (input.files.length > 0) {
+                uploadMessage.style.display = 'block';
+                progressContainer.style.display = 'block';
+
+                const file = input.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+                    const csvData = event.target.result;
+                    const lines = csvData.split('\n');
+                    const totalLines = lines.length;
+                    let processedLines = 0;
+
+                    for (const line of lines) {
+                        const email = line.trim();
+                        let hashedEmail = '';
+
+                        if (algorithm === 'sha256') {
+                            hashedEmail = CryptoJS.SHA256(email).toString();
+                        } else if (algorithm === 'md5') {
+                            hashedEmail = CryptoJS.MD5(email).toString();
+                        }
+
+                        hashedEmails.push(hashedEmail);
+                        processedLines++;
+
+                        // 업로드 상황 게이지 업데이트
+                        const progressPercentage = (processedLines / totalLines) * 100;
+                        progressBar.style.width = progressPercentage + '%';
+                    }
+
+                    displayResults();
+                    document.getElementById('showAllButton').style.display = 'block';
+                };
+
+                reader.readAsText(file);
+            } else {
+                uploadMessage.style.display = 'none';
+                progressContainer.style.display = 'none';
+            }
+        }
         function hashEmails(algorithm) {
             const fileInput = document.getElementById('csv_file');
             hashedEmails = [];
@@ -162,7 +224,14 @@
 
             reader.readAsText(file);
         }
-
+        function handleFileUpload(input) {
+            const uploadMessage = document.getElementById('uploadMessage');
+            if (input.files.length > 0) {
+                uploadMessage.style.display = 'block';
+            } else {
+                uploadMessage.style.display = 'none';
+            }
+        }
         function displayResults() {
             const hashedEmailList = document.getElementById('hashedEmailList');
             hashedEmailList.innerHTML = '';
