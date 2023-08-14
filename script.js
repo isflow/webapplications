@@ -4,7 +4,6 @@ let hashedEmails = [];
 let displayedResults = 10;
 let algorithm = '';
 let uploadedFileName = '';
-const instructionsElement = document.getElementById('instructions');
 
 function handleFileUpload(input) {
     const uploadMessage = document.getElementById('uploadMessage');
@@ -150,14 +149,15 @@ const languageInstructions = {
     ko: 'Criteo에 업로드가 가능한 이메일주소는 아래와 같습니다.<br>1. 플레인 이메일을 SHA-256로 해쉬한 값(추천)<br>2. 플레인 이메일을 MD5로 해쉬한 값<br>3. MD5로 해쉬한 값을 한번더 SHA-256로 해쉬한 값',
 };
 
-// 사용자의 브라우저 언어 가져오기
+// 사용자의 브라우저 언어 가져오기 및 해쉬화 룰 설명하기
 const userLanguage = navigator.language || navigator.userLanguage;
-
-// 언어에 따른 주의문구 표시
-if (userLanguage.startsWith('en-US')) {
-    instructionsElement.innerHTML = languageInstructions.en;
-} else if (userLanguage.startsWith('ko-KR')) {
-    instructionsElement.innerHTML = languageInstructions.ko;
-} else {
-    instructionsElement.innerHTML = languageInstructions.ja;
+const instructionsElement = document.getElementById('instructions');
+if (instructionsElement) {
+    if (userLanguage.startsWith('en-US')) {
+        instructionsElement.innerHTML = languageInstructions.en;
+    } else if (userLanguage.startsWith('ko-KR')) {
+        instructionsElement.innerHTML = languageInstructions.ko;
+    } else {
+        instructionsElement.innerHTML = languageInstructions.ja;
+    }
 }
