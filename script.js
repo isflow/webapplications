@@ -4,6 +4,7 @@ let hashedEmails = [];
 let displayedResults = 10;
 let algorithm = '';
 let uploadedFileName = '';
+const instructionsElement = document.getElementById('instructions');
 
 function handleFileUpload(input) {
     const uploadMessage = document.getElementById('uploadMessage');
@@ -142,7 +143,7 @@ function showLessResults() {
     document.getElementById('showLessButton').style.display = 'none';
 }
 
-// 지원하는 언어와 주의문구 매핑
+// 언어에 따른 주의문구 표시
 const languageInstructions = {
     en: 'Please choose a hashing method for upload:<br>1. MD5 hash of plain text emails<br>2. SHA256 hash of previously MD5 hashed emails<br>3. SHA256 hash of plain text emails',
     ja: '顧客のEメールアドレスのハッシュ化は下記3通りの方法でアップロード可能です<br>1. プレーンテキストのEメールのSHA256ハッシュ(推奨)<br>2. プレーンテキストのEメールのMD5ハッシュ<br>3. MD5ハッシュされたEメールのSHA256ハッシュ(上記2の方法に再度1のハッシュ化を行う)<br>※日本ではプレーンテキスト(生のEメールアドレス)をアップロードすることはできません',
@@ -154,9 +155,9 @@ const userLanguage = navigator.language || navigator.userLanguage;
 
 // 언어에 따른 주의문구 표시
 if (userLanguage.startsWith('en-US')) {
-    instructionsElement.textContent = languageInstructions.en;
+    instructionsElement.innerHTML = languageInstructions.en;
 } else if (userLanguage.startsWith('ko-KR')) {
-    instructionsElement.textContent = languageInstructions.ko;
+    instructionsElement.innerHTML = languageInstructions.ko;
 } else {
-    instructionsElement.textContent = languageInstructions.ja;
+    instructionsElement.innerHTML = languageInstructions.ja;
 }
