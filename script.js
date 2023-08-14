@@ -145,7 +145,7 @@ function showLessResults() {
 
 // 언어에 따른 주의문구 표시
 const languageInstructions = {
-    en: 'Please choose a hashing method for upload:<br>1. MD5 hash of plain text emails<br>2. SHA256 hash of previously MD5 hashed emails<br>3. SHA256 hash of plain text emails',
+    en: 'Please choose a hashing method for upload:<br>1. SHA256 hash of plain text emails (Strongly recommended)<br>2. MD5 hash of plain text emails<br>3. SHA256 hash of previously MD5 hashed emails',
     ja: '顧客のEメールアドレスのハッシュ化は下記3通りの方法でアップロード可能です<br>1. プレーンテキストのEメールのSHA256ハッシュ(推奨)<br>2. プレーンテキストのEメールのMD5ハッシュ<br>3. MD5ハッシュされたEメールのSHA256ハッシュ(上記2の方法に再度1のハッシュ化を行う)<br>※日本ではプレーンテキスト(生のEメールアドレス)をアップロードすることはできません',
     ko: 'Criteo에 업로드가 가능한 이메일주소는 아래와 같습니다.<br>1. 플레인 이메일을 SHA-256로 해쉬한 값(추천)<br>2. 플레인 이메일을 MD5로 해쉬한 값<br>3. MD5로 해쉬한 값을 한번더 SHA-256로 해쉬한 값',
 };
