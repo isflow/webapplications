@@ -1,0 +1,125 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    max-width: 800px;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+h1 {
+    color: #003366;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+h2, h3 {
+    color: #003366;
+    margin-top: 20px;
+    text-align: left;
+}
+
+form {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.upload-btn {
+    display: inline-block;
+    background-color: #003366;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.upload-btn:hover {
+    background-color: #005587;
+}
+
+.method-btn-container {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.method-btn {
+    display: inline-block;
+    background-color: #003366;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.method-btn:hover {
+    background-color: #005587;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+li {
+    margin-bottom: 5px;
+}
+
+#showAllButton, #downloadLink {
+    margin-top: 10px;
+    text-align: left;
+}
+
+#hashedEmailList {
+    padding-left: 20px;
+}
+
+#showAllButton {
+    display: none;
+}
+
+#downloadLink {
+    display: none;
+    text-align: left;
+}
+
+.upload-message, .progress-container {
+    display: none;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.progress-bar {
+    width: 0;
+    height: 20px;
+    background-color: #4CAF50;
+}
+
+footer {
+    margin-top: auto;
+    margin-bottom: 20px;
+    color: #666;
+    text-align: center;
+    width: 100%;
+}
+
+footer a {
+    color: #003366;
+    text-decoration: none;
+}
