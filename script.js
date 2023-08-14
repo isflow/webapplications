@@ -151,14 +151,17 @@ const languageInstructions = {
 };
 
 // 사용자의 브라우저 언어 가져오기 및 해쉬화 룰 설명하기
-const userLanguage = navigator.language || navigator.userLanguage;
-const instructionsElement = document.getElementById('instructions');
-if (instructionsElement) {
-    if (userLanguage.startsWith('en-US')) {
-        instructionsElement.innerHTML = languageInstructions.en;
-    } else if (userLanguage.startsWith('ko-KR')) {
-        instructionsElement.innerHTML = languageInstructions.ko;
-    } else {
-        instructionsElement.innerHTML = languageInstructions.ja;
+function updateInstructions() {
+    const userLanguage = navigator.language || navigator.userLanguage;
+    const instructionsElement = document.getElementById('instructions');
+    if (instructionsElement) {
+        if (userLanguage.startsWith('en-US')) {
+            instructionsElement.innerHTML = languageInstructions.en;
+        } else if (userLanguage.startsWith('ko-KR')) {
+            instructionsElement.innerHTML = languageInstructions.ko;
+        } else {
+            instructionsElement.innerHTML = languageInstructions.ja;
+        }
     }
 }
+updateInstructions();
