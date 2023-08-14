@@ -212,12 +212,12 @@
         const instructionsElement = document.getElementById('instructions');
 
         // 언어에 따른 주의문구 표시
-        if (userLanguage.startsWith('ja')) {
-            instructionsElement.innerHTML = languageInstructions.ja;
+        if (userLanguage.startsWith('en')) {
+            instructionsElement.innerHTML = languageInstructions.en;
         } else if (userLanguage.startsWith('ko')) {
             instructionsElement.innerHTML = languageInstructions.ko;
         } else {
-            instructionsElement.innerHTML = languageInstructions.en;
+            instructionsElement.innerHTML = languageInstructions.ja;
         }
     </script>
 </body>
