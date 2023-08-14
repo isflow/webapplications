@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Hashing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 800px;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        h1 {
+            color: #003366;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        h2, h3 {
+            color: #003366;
+            margin-top: 20px;
+            text-align: left;
+        }
+        form {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .upload-btn {
+            display: inline-block;
+            background-color: #003366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .upload-btn:hover {
+            background-color: #005587;
+        }
+        .method-btn-container {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .method-btn {
+            display: inline-block;
+            background-color: #003366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .method-btn:hover {
+            background-color: #005587;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        #showAllButton, #downloadLink {
+            margin-top: 10px;
+            text-align: left;
+        }
+        #hashedEmailList {
+            padding-left: 20px;
+        }
+        #showAllButton {
+            display: none;
+        }
+        #downloadLink {
+            display: none;
+            text-align: left;
+        }
+        footer {
+            margin-top: 20px;
+            color: #666;
+            text-align: center;
+            width: 100%;
+        }
+        footer a {
+            color: #003366;
+            text-decoration: none;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Email Hashing</h1>
+
+        <h2>Step 1: Select a CSV File</h2>
+        <form>
+            <label for="csv_file" class="upload-btn">Upload CSV File</label>
+            <input type="file" id="csv_file" accept=".csv">
+        </form>
+
+        <div class="method-btn-container">
+            <h2>Step 2: Choose Hashing Method</h2>
+            <p id="instructions"></p>
+            <button class="method-btn" type="button" onclick="hashEmails('md5')">Hash with MD5</button>
+            <button class="method-btn" type="button" onclick="hashEmails('sha256')">Hash with SHA-256</button>
+        </div>
+
+        <h2>Step 3: View Results and Download</h2>
+        <div>
+            <ul id="hashedEmailList"></ul>
+            <button class="method-btn" type="button" id="showAllButton" style="display: none;" onclick="showAllResults()">Show All Results</button>
+            <a id="downloadLink" style="display: none;">Download Hashed Emails</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>Criteo does not collect plain email addresses, and during the use of this tool, no email addresses are transmitted to Criteo.<br>If you have any questions, please contact here <a href="mailto:ji.lee@criteo.com">ji.lee@criteo.com</a>.</p>
+    </footer>
+    <script>
+        let hashedEmails = [];
+        let displayedResults = 10;
+
+        function hashEmails(algorithm) {
+            const fileInput = document.getElementById('csv_file');
+            hashedEmails = [];
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                const csvData = event.target.result;
+                const lines = csvData.split('\n');
+
+                for (const line of lines) {
+                    const email = line.trim();
+                    let hashedEmail = '';
+
+                    if (algorithm === 'sha256') {
+                        hashedEmail = CryptoJS.SHA256(email).toString();
+                    } else if (algorithm === 'md5') {
+                        hashedEmail = CryptoJS.MD5(email).toString();
+                    }
+
+                    hashedEmails.push(hashedEmail);
+                }
+
+                displayResults();
+                document.getElementById('showAllButton').style.display = 'block';
+            };
+
+            reader.readAsText(file);
+        }
+
+        function displayResults() {
+            const hashedEmailList = document.getElementById('hashedEmailList');
+            hashedEmailList.innerHTML = '';
+
+            for (let i = 0; i < displayedResults; i++) {
+                const hashedEmail = hashedEmails[i];
+                if (hashedEmail) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = hashedEmail;
+                    hashedEmailList.appendChild(listItem);
+                }
+            }
+
+            if (hashedEmails.length > displayedResults) {
+                const remainingCount = hashedEmails.length - displayedResults;
+                const listItem = document.createElement('li');
+                listItem.textContent = `... and ${remainingCount} more`;
+                hashedEmailList.appendChild(listItem);
+            }
+
+            const downloadLink = document.getElementById('downloadLink');
+            if (hashedEmails.length > 0) {
+                const csvContent = hashedEmails.join('\n');
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+
+                downloadLink.href = url;
+                downloadLink.download = 'hashed_emails.csv';
+                downloadLink.style.display = 'block';
+            }
+        }
+
+        function showAllResults() {
+            displayedResults = hashedEmails.length;
+            displayResults();
+        }
+
+        // 지원하는 언어와 주의문구 매핑
+        const languageInstructions = {
+            en: 'Please choose a hashing method for upload:<br>1. MD5 hash of plain text emails<br>2. SHA256 hash of previously MD5 hashed emails<br>3. SHA256 hash of plain text emails',
+            ja: 'アップロードができる顧客のEメールアドレスは以下の通りです。<br>1. プレーン テキストの電子メールの MD5 ハッシュ<br>2. 以前に MD5 ハッシュされたEメールの SHA256 ハッシュ<br>3. プレーン テキストのEメールの SHA256 ハッシュ(推奨)<br>※日本ではプレーンテキスト(生のEメールアドレス)をアップロードすることはできません。',
+            ko: 'Criteo에 업로드가 가능한 E메일주소는 아래와 같습니다.<br>1. 플레인 이메일을 MD5로 해쉬한 값<br>2. 위 1의 값(MD5로 해쉬한 값)을, 추가로 SHA-256로 해쉬한 값<br>3. 플레인 이메일을 SHA256로 해쉬한 값',
+        };
+
+        // 사용자의 브라우저 언어 가져오기
+        const userLanguage = navigator.language || navigator.userLanguage;
+        const instructionsElement = document.getElementById('instructions');
+
+        // 언어에 따른 주의문구 표시
+        if (userLanguage.startsWith('ja')) {
+            instructionsElement.innerHTML = languageInstructions.ja;
+        } else if (userLanguage.startsWith('ko')) {
+            instructionsElement.innerHTML = languageInstructions.ko;
+        } else {
+            instructionsElement.innerHTML = languageInstructions.en;
+        }
+    </script>
+</body>
+</html>
