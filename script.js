@@ -1,4 +1,4 @@
-/** 2023/08/15 Sumomo culture's **/
+/** 2023/08/14 Sumomo culture's **/
 
 const { SHA256, MD5 } = CryptoJS;
 let hashedEmails = [];
@@ -57,7 +57,6 @@ function handleFileUpload(input) {
         progressContainer.style.display = 'none';
     }
 }
-
 function hashEmails(algorithm) {
     const fileInput = document.getElementById('csv_file');
     hashedEmails = [];
@@ -88,7 +87,16 @@ function hashEmails(algorithm) {
 
     reader.readAsText(file);
 }
-
+function handleFileUpload(input) {
+    const uploadMessage = document.getElementById('uploadMessage');
+    if (input.files.length > 0) {
+        const fileName = input.files[0].name;
+        uploadMessage.textContent = `Uploaded File: ${fileName}`;
+        uploadMessage.style.display = 'block';
+    } else {
+        uploadMessage.style.display = 'none';
+    }
+}
 function displayResults() {
     const hashedEmailList = document.getElementById('hashedEmailList');
     hashedEmailList.innerHTML = '';
@@ -143,17 +151,14 @@ const languageInstructions = {
 };
 
 // 사용자의 브라우저 언어 가져오기 및 해쉬화 룰 설명하기
-function updateInstructions() {
-    const userLanguage = navigator.language || navigator.userLanguage;
-    const instructionsElement = document.getElementById('instructions');
-    if (instructionsElement) {
-        if (userLanguage.startsWith('en-US')) {
-            instructionsElement.innerHTML = languageInstructions.en;
-        } else if (userLanguage.startsWith('ko-KR')) {
-            instructionsElement.innerHTML = languageInstructions.ko;
-        } else {
-            instructionsElement.innerHTML = languageInstructions.ja;
-        }
+const userLanguage = navigator.language || navigator.userLanguage;
+const instructionsElement = document.getElementById('instructions');
+if (instructionsElement) {
+    if (userLanguage.startsWith('en-US')) {
+        instructionsElement.innerHTML = languageInstructions.en;
+    } else if (userLanguage.startsWith('ko-KR')) {
+        instructionsElement.innerHTML = languageInstructions.ko;
+    } else {
+        instructionsElement.innerHTML = languageInstructions.ja;
     }
 }
-updateInstructions();
