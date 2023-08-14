@@ -151,13 +151,12 @@ const languageInstructions = {
 
 // 사용자의 브라우저 언어 가져오기
 const userLanguage = navigator.language || navigator.userLanguage;
-const instructionsElement = document.getElementById('instructions');
 
 // 언어에 따른 주의문구 표시
 if (userLanguage.startsWith('en-US')) {
-    instructionsElement.innerHTML = languageInstructions.en;
+    instructionsElement.textContent = languageInstructions.en;
 } else if (userLanguage.startsWith('ko-KR')) {
-    instructionsElement.innerHTML = languageInstructions.ko;
+    instructionsElement.textContent = languageInstructions.ko;
 } else {
-    instructionsElement.innerHTML = languageInstructions.ja;
+    instructionsElement.textContent = languageInstructions.ja;
 }
