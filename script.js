@@ -56,7 +56,6 @@ function handleFileUpload(input) {
         progressContainer.style.display = 'none';
     }
 }
-
 function hashEmails(algorithm) {
     const fileInput = document.getElementById('csv_file');
     hashedEmails = [];
@@ -87,7 +86,16 @@ function hashEmails(algorithm) {
 
     reader.readAsText(file);
 }
-
+function handleFileUpload(input) {
+    const uploadMessage = document.getElementById('uploadMessage');
+    if (input.files.length > 0) {
+        const fileName = input.files[0].name;
+        uploadMessage.textContent = `Uploaded File: ${fileName}`;
+        uploadMessage.style.display = 'block';
+    } else {
+        uploadMessage.style.display = 'none';
+    }
+}
 function displayResults() {
     const hashedEmailList = document.getElementById('hashedEmailList');
     hashedEmailList.innerHTML = '';
