@@ -1,5 +1,5 @@
 /** 2023/08/14 Sumomo culture's **/
-
+const { SHA256, MD5 } = CryptoJS;
 let hashedEmails = [];
 let displayedResults = 10;
 let algorithm = '';
