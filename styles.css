@@ -116,10 +116,10 @@ li {
 }
 
 #scrollTopBtn img {
+    display: none;
     width: 20px;
     height: 20px;
 }
-
 
 #scrollTopBtn:hover {
     background-color: #333;
