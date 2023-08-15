@@ -116,9 +116,8 @@ li {
 }
 
 #scrollTopBtn img {
-    display: none;
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
 }
 
 #scrollTopBtn:hover {
