@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Hashing</title>
     <link rel="icon" href="https://www.criteo.com/wp-content/themes/criteo2017/img/favicon.ico">
     <link rel="stylesheet" type="text/css" href="styles.css">
@@ -24,22 +26,21 @@
             <label for="csv_file" class="upload-btn">Upload CSV File</label>
             <input type="file" id="csv_file" accept=".csv" onchange="handleFileUpload(this)">
         </form>
-        <p class="upload-message" id="uploadMessage">Upload complete!</p>
-        <div class="progress-container" id="progressContainer">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
+        <p class="upload-message" id="uploadMessage"><span id="uploadedFileName" style="display: none;"></span></p>
+        <p id="uploadedFileContent" style="display: none;"></p>
 
         <div class="method-btn-container">
             <h2>Step 2: Choose Hashing Method</h2>
             <p id="instructions"></p>
-            <button class="method-btn" type="button" onclick="hashEmails('sha256')">Hash with SHA-256</button>
-            <button class="method-btn" type="button" onclick="hashEmails('md5')">Hash with MD5</button>
+            <button class="method-btn" type="button" onclick="selectHashingMethod('sha256')">Hash with SHA-256</button>
+            <button class="method-btn" type="button" onclick="selectHashingMethod('md5')">Hash with MD5</button>
+            <button class="method-btn" type="button" onclick="selectHashingMethod('md5sha256')">Hash with MD5+SHA-256</button>
         </div>
 
         <h2>Step 3: View Results and Download</h2>
         <div>
-            <ul id="hashedEmailList"></ul>
             <button class="method-btn" type="button" id="showAllButton" style="display: none;" onclick="showAllResults()">Show All Results</button>
+            <ul id="hashedEmailList"></ul>
             <button class="method-btn" type="button" id="showLessButton" style="display: none;" onclick="showLessResults()">Show Less Results</button>
             <a id="downloadLink" style="display: none;">Download Hashed Emails</a>
         </div>
@@ -52,22 +53,26 @@
     <script>
         let hashedEmails = [];
         let displayedResults = 10;
-        let algorithm = '';
+        let selectedMethod = '';
         let uploadedFileName = '';
+        let uploadedFileContent = [];
 
         function handleFileUpload(input) {
             const uploadMessage = document.getElementById('uploadMessage');
             const uploadedFileNameElement = document.getElementById('uploadedFileName');
-            const progressContainer = document.getElementById('progressContainer');
-            const progressBar = document.getElementById('progressBar');
+            const uploadedFileContentElement = document.getElementById('uploadedFileContent');
 
             if (input.files.length > 0) {
                 const file = input.files[0];
-                uploadedFileName = file.name; // 업로드한 파일명 저장
+                uploadedFileName = file.name;
+
+                uploadedFileNameElement.textContent = ` Uploaded File: ${uploadedFileName}`;
+                uploadedFileNameElement.style.display = 'inline';
+
+                uploadedFileContentElement.style.display = 'none';
+                uploadedFileContent = [];
 
                 uploadMessage.style.display = 'block';
-                uploadedFileNameElement.textContent = `Uploaded File: ${uploadedFileName}`;
-                progressContainer.style.display = 'block';
 
                 const reader = new FileReader();
 
@@ -75,45 +80,35 @@
                     const csvData = event.target.result;
                     const lines = csvData.split('\n');
                     const totalLines = lines.length;
-                    let processedLines = 0;
 
                     for (const line of lines) {
-                        const email = line.trim();
-                        let hashedEmail = '';
-
-                        if (algorithm === 'sha256') {
-                            hashedEmail = CryptoJS.SHA256(email).toString();
-                        } else if (algorithm === 'md5') {
-                            hashedEmail = CryptoJS.MD5(email).toString();
-                        }
-
-                        hashedEmails.push(hashedEmail);
-                        processedLines++;
-
-                        // 업로드 상황 게이지 업데이트
-                        const progressPercentage = (processedLines / totalLines) * 100;
-                        progressBar.style.width = progressPercentage + '%';
+                        uploadedFileContent.push(line.trim());
                     }
 
-                    displayResults();
-                    document.getElementById('showAllButton').style.display = 'block';
+                    displayUploadedFileContent();
                 };
 
                 reader.readAsText(file);
             } else {
                 uploadMessage.style.display = 'none';
-                uploadedFileNameElement.textContent = ''; // 파일명 초기화
-                progressContainer.style.display = 'none';
+                uploadedFileNameElement.style.display = 'none';
+                uploadedFileContentElement.style.display = 'none';
             }
         }
-        function hashEmails(algorithm) {
+
+        function selectHashingMethod(method) {
+            selectedMethod = method;
+            hashEmails();
+        }
+
+        function hashEmails() {
             const fileInput = document.getElementById('csv_file');
             hashedEmails = [];
 
             const file = fileInput.files[0];
             const reader = new FileReader();
 
-            reader.onload = function(event) {
+            reader.onload = function (event) {
                 const csvData = event.target.result;
                 const lines = csvData.split('\n');
 
@@ -121,10 +116,13 @@
                     const email = line.trim();
                     let hashedEmail = '';
 
-                    if (algorithm === 'sha256') {
+                    if (selectedMethod === 'sha256') {
                         hashedEmail = CryptoJS.SHA256(email).toString();
-                    } else if (algorithm === 'md5') {
+                    } else if (selectedMethod === 'md5') {
                         hashedEmail = CryptoJS.MD5(email).toString();
+                    } else if (selectedMethod === 'md5sha256') {
+                        const md5Hash = CryptoJS.MD5(email).toString();
+                        hashedEmail = CryptoJS.SHA256(md5Hash).toString();
                     }
 
                     hashedEmails.push(hashedEmail);
@@ -136,16 +134,20 @@
 
             reader.readAsText(file);
         }
-        function handleFileUpload(input) {
-            const uploadMessage = document.getElementById('uploadMessage');
-            if (input.files.length > 0) {
-                const fileName = input.files[0].name;
-                uploadMessage.textContent = `Uploaded File: ${fileName}`;
-                uploadMessage.style.display = 'block';
+
+        function displayUploadedFileContent() {
+            const uploadedFileContentElement = document.getElementById('uploadedFileContent');
+            const contentToShow = uploadedFileContent.slice(0, displayedResults).join('<br>');
+
+            if (uploadedFileContent.length > displayedResults) {
+                uploadedFileContentElement.innerHTML = `Uploaded File Content:<br>${contentToShow} <br>... and ${uploadedFileContent.length - displayedResults} more`;
             } else {
-                uploadMessage.style.display = 'none';
+                uploadedFileContentElement.innerHTML = `Uploaded File Content:<br>${contentToShow}`;
             }
+
+            uploadedFileContentElement.style.display = 'block';
         }
+
         function displayResults() {
             const hashedEmailList = document.getElementById('hashedEmailList');
             hashedEmailList.innerHTML = '';
