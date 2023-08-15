@@ -42,7 +42,6 @@
             <button class="method-btn" type="button" id="showAllButton" style="display: none;" onclick="showAllResults()">Show All Results</button>
             <button class="method-btn" type="button" id="showLessButton" style="display: none;" onclick="showLessResults()">Show Less Results</button>
             <ul id="hashedEmailList"></ul>
-            <button class="method-btn" type="button" id="showLessButton2" style="display: none;" onclick="showLessResults()">Show Less Results</button>
             <a id="downloadLink" style="display: none;">Download Hashed Emails</a>
         </div>
     </div>
@@ -186,7 +185,6 @@
             displayResults();
             document.getElementById('showAllButton').style.display = 'none';
             document.getElementById('showLessButton').style.display = 'block';
-            document.getElementById('showLessButton2').style.display = 'block';
         }
 
         function showLessResults() {
@@ -194,7 +192,6 @@
             displayResults();
             document.getElementById('showAllButton').style.display = 'block';
             document.getElementById('showLessButton').style.display = 'none';
-            document.getElementById('showLessButton2').style.display = 'none';
         }
 
         // 지원하는 언어와 주의문구 매핑
