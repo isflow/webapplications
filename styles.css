@@ -115,6 +115,10 @@ li {
     background-color: #4CAF50;
 }
 
+#scrollTopBtn {
+    display: none;
+}
+
 #scrollTopBtn img {
     width: 25px;
     height: 25px;
