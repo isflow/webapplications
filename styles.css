@@ -116,16 +116,23 @@ li {
 }
 
 #scrollTopBtn {
-    display: none;
+    display: none; /* 기본적으로는 숨겨져있음 */
+    position: fixed; /* 고정 위치 */
+    bottom: 10px; /* 하단부터 10px 위에 위치 */
+    right: 10px; /* 오른쪽부터 10px 왼쪽에 위치 */
+    z-index: 1000; /* 다른 요소 위에 표시됨 */
+    transition: transform 0.3s, opacity 0.3s; /* 애니메이션 효과 추가 */
+    transform: scale(0.95); /* 약간 축소되어 시작 */
 }
 
 #scrollTopBtn img {
-    width: 25px;
-    height: 25px;
+    width: 55px;
+    height: 55px;
 }
 
 #scrollTopBtn:hover {
-    background-color: #333;
+    transform: scale(1); /* 마우스 호버 시 원래 크기로 확장 */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* 그림자 효과 추가 */
 }
 
 footer {
