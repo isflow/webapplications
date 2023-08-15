@@ -222,12 +222,9 @@
         document.getElementById("scrollTopBtn").addEventListener("click", function() {
             window.scrollTo({top: 0, behavior: 'smooth'});
         });
-        
-        // 옵션: 스크롤이 일정 위치에 도달했을 때 버튼을 표시하거나 숨기는 코드
         window.onscroll = function() {scrollFunction()};
-        
         function scrollFunction() {
-            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
                 document.getElementById("scrollTopBtn").style.display = "block";
             } else {
                 document.getElementById("scrollTopBtn").style.display = "none";
