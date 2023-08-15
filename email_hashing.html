@@ -213,6 +213,25 @@
         } else {
             instructionsElement.innerHTML = languageInstructions.ja;
         }
+
+        // Top btn
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+        window.onscroll = function() {scrollFunction()};
+        function scrollFunction() {
+            // 스크롤이 20px보다 더 내려갔을 때 버튼을 표시
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollTopBtn.style.display = "block";
+            } else {
+                scrollTopBtn.style.display = "none";
+            }
+        }
+        scrollTopBtn.onclick = function() {
+            document.body.scrollTop = 0; // Safari 지원
+            document.documentElement.scrollTop = 0; // Chrome, Firefox, IE, Opera 지원
+        }
     </script>
+    <button id="scrollTopBtn" title="Go to top">
+    <img src="upppp.png" alt="Top Icon">
+    </button>
 </body>
 </html>
