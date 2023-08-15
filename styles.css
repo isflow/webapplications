@@ -90,6 +90,10 @@ li {
     padding-left: 20px;
 }
 
+#instructions {
+    font-size: 12px;
+}
+
 #showAllButton {
     display: none;
 }
