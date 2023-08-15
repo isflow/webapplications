@@ -115,6 +115,16 @@ li {
     background-color: #4CAF50;
 }
 
+#scrollTopBtn img {
+    width: 20px;
+    height: 20px;
+}
+
+
+#scrollTopBtn:hover {
+    background-color: #333;
+}
+
 footer {
     margin-top: auto;
     margin-bottom: 20px;
