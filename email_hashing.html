@@ -46,6 +46,10 @@
         </div>
     </div>
 
+    <button id="scrollTopBtn" title="Go to top">
+        <img src="upppp.png" alt="Top Icon">
+    </button>
+    
     <footer>
         <p>Criteo does not collect plain email addresses, and during the use of this tool, no email addresses are transmitted to Criteo.<br>If you have any questions, please contact here <a href="mailto:ji.lee@criteo.com">ji.lee@criteo.com</a>.</p>
     </footer>
@@ -215,23 +219,20 @@
         }
 
         // Top btn
-        const scrollTopBtn = document.getElementById("scrollTopBtn");
+        document.getElementById("scrollTopBtn").addEventListener("click", function() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        });
+        
+        // 옵션: 스크롤이 일정 위치에 도달했을 때 버튼을 표시하거나 숨기는 코드
         window.onscroll = function() {scrollFunction()};
+        
         function scrollFunction() {
-            // 스크롤이 20px보다 더 내려갔을 때 버튼을 표시
             if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                scrollTopBtn.style.display = "block";
+                document.getElementById("scrollTopBtn").style.display = "block";
             } else {
-                scrollTopBtn.style.display = "none";
+                document.getElementById("scrollTopBtn").style.display = "none";
             }
         }
-        scrollTopBtn.onclick = function() {
-            document.body.scrollTop = 0; // Safari 지원
-            document.documentElement.scrollTop = 0; // Chrome, Firefox, IE, Opera 지원
-        }
     </script>
-    <button id="scrollTopBtn" title="Go to top">
-    <img src="upppp.png" alt="Top Icon">
-    </button>
 </body>
 </html>
