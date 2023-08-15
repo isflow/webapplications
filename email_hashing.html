@@ -219,12 +219,9 @@
         }
 
         // Top btn
-        document.getElementById("scrollTopBtn").addEventListener("click", function() {
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        });
-        window.onscroll = function() {scrollFunction()};
         function scrollFunction() {
-            if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+            let screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight; 
+            if (document.body.scrollTop > 2*screenHeight || document.documentElement.scrollTop > 2*screenHeight) {
                 document.getElementById("scrollTopBtn").style.display = "inline-block";
             } else {
                 document.getElementById("scrollTopBtn").style.display = "none";
