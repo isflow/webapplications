@@ -62,65 +62,62 @@
         let uploadedFileContent = [];
         let fileUploaded = false;
 
-        function handleFileUpload(input) { 
+        async function handleFileUpload(input) { 
             const uploadMessage = document.getElementById('uploadMessage');
             const uploadedFileNameElement = document.getElementById('uploadedFileName');
             const uploadedFileContentElement = document.getElementById('uploadedFileContent');
+            
             if (input.files.length > 0) {
                 fileUploaded = true;
                 const file = input.files[0];
                 uploadedFileName = file.name;
-
+        
                 uploadedFileNameElement.textContent = ` Uploaded File: ${uploadedFileName}`;
                 uploadedFileNameElement.style.display = 'inline';
-
                 uploadedFileContentElement.style.display = 'none';
                 uploadedFileContent = [];
-
                 uploadMessage.style.display = 'block';
-
-                const reader = new FileReader();
-
-                reader.onload = function(event) {
-                    const csvData = event.target.result;
+        
+                try {
+                    const csvData = await readFileContent(file);
                     const lines = csvData.split('\n');
-                    const totalLines = lines.length;
-
                     for (const line of lines) {
                         uploadedFileContent.push(line.trim());
                     }
                     displayedResults = 6;
                     displayUploadedFileContent();
-                };
-
-                reader.readAsText(file);
+                } catch (error) {
+                    console.error("Error reading the file:", error);
+                }
+        
             } else {
                 uploadMessage.style.display = 'none';
                 uploadedFileNameElement.style.display = 'none';
                 uploadedFileContentElement.style.display = 'none';
             }
         }
-
+        
         function selectHashingMethod(method) {
             selectedMethod = method;
             hashEmails();
         }
 
-        function hashEmails() {
+        async function hashEmails() {
             const fileInput = document.getElementById('csv_file');
             hashedEmails = [];
-
+            
+            if (fileInput.files.length === 0) return;
+        
             const file = fileInput.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function (event) {
-                const csvData = event.target.result;
+        
+            try {
+                const csvData = await readFileContent(file);
                 const lines = csvData.split('\n');
-
+        
                 for (const line of lines) {
                     const email = line.trim();
                     let hashedEmail = '';
-
+        
                     if (selectedMethod === 'sha256') {
                         hashedEmail = CryptoJS.SHA256(email).toString();
                     } else if (selectedMethod === 'md5') {
@@ -129,15 +126,15 @@
                         const md5Hash = CryptoJS.MD5(email).toString();
                         hashedEmail = CryptoJS.SHA256(md5Hash).toString();
                     }
-
+        
                     hashedEmails.push(hashedEmail);
                 }
-
+        
                 displayResults();
                 document.getElementById('showAllButton').style.display = 'block';
-            };
-
-            reader.readAsText(file);
+            } catch (error) {
+                console.error("Error reading the file:", error);
+            }
         }
 
         function displayUploadedFileContent() {
