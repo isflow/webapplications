@@ -60,13 +60,18 @@
         let selectedMethod = '';
         let uploadedFileName = '';
         let uploadedFileContent = [];
+        let fileUploaded = false;
 
         function handleFileUpload(input) {
+        if (fileUploaded) {
+            location.reload();
+            return;
+        }            
             const uploadMessage = document.getElementById('uploadMessage');
             const uploadedFileNameElement = document.getElementById('uploadedFileName');
             const uploadedFileContentElement = document.getElementById('uploadedFileContent');
-
             if (input.files.length > 0) {
+                fileUploaded = true;
                 const file = input.files[0];
                 uploadedFileName = file.name;
 
