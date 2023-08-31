@@ -77,8 +77,9 @@
             const uploadMessage = document.getElementById('uploadMessage');
             const uploadedFileNameElement = document.getElementById('uploadedFileName');
             const uploadedFileContentElement = document.getElementById('uploadedFileContent');
-            
-            if (input.files.length > 0) {
+            if (document.getElementById('showLessButton').style.display === 'block') {
+                showLessResults();
+            }if (input.files.length > 0) {
                 fileUploaded = true;
                 const file = input.files[0];
                 uploadedFileName = file.name;
