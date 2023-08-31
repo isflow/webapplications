@@ -62,11 +62,7 @@
         let uploadedFileContent = [];
         let fileUploaded = false;
 
-        function handleFileUpload(input) {
-        if (fileUploaded) {
-            location.reload();
-            return;
-        }            
+        function handleFileUpload(input) { 
             const uploadMessage = document.getElementById('uploadMessage');
             const uploadedFileNameElement = document.getElementById('uploadedFileName');
             const uploadedFileContentElement = document.getElementById('uploadedFileContent');
@@ -238,6 +234,10 @@
         }
         window.onscroll = function() { scrollFunction() };
         document.getElementById("scrollTopBtn").addEventListener("click", scrollToTop);
+        document.getElementById('csv_file').addEventListener('click', function() {
+        if (fileUploaded) {
+            location.reload();
+        }
     </script>
 </body>
 </html>
